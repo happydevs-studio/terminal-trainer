@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Trainer - Learn Command Line Tools</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Terminal Trainer</h1>
+            <p class="subtitle">Interactive command line learning in your browser</p>
+        </header>
+
+        <div class="terminal">
+            <div class="terminal-header">
+                <span class="terminal-title">terminal-trainer@web:~$</span>
+                <div class="terminal-controls">
+                    <span class="control minimize"></span>
+                    <span class="control maximize"></span>
+                    <span class="control close"></span>
+                </div>
+            </div>
+
+            <div class="terminal-body">
+                <div id="output"></div>
+                <div class="input-line">
+                    <span class="prompt">$</span>
+                    <input type="text" id="command-input" placeholder="Type 'help' to get started" autofocus>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <h3>Available Commands</h3>
+            <ul>
+                <li><code>help</code> - Show available commands</li>
+                <li><code>quiz [topic]</code> - Start a quiz (linux, git, docker, kubectl, vscode)</li>
+                <li><code>cheat [topic]</code> - Show cheat sheet</li>
+                <li><code>clear</code> - Clear terminal</li>
+            </ul>
+            
+            <h3>Available Topics</h3>
+            <ul>
+                <li><code>linux</code> - Basic Linux commands</li>
+                <li><code>git</code> - Git version control</li>
+                <li><code>docker</code> - Docker containerization</li>
+                <li><code>kubectl</code> - Kubernetes management</li>
+                <li><code>vscode</code> - VS Code shortcuts</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
