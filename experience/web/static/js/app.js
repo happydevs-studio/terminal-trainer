@@ -71,19 +71,28 @@ function printCommand(command) {
     scrollToBottom();
 }
 
+function printAnswer(answer) {
+    const line = document.createElement('div');
+    line.className = 'output-line';
+    line.innerHTML = `<span style="color: #60a5fa;">›</span> ${answer}`;
+    output.appendChild(line);
+    scrollToBottom();
+}
+
 function scrollToBottom() {
     const terminalBody = document.querySelector('.terminal-body');
     terminalBody.scrollTop = terminalBody.scrollHeight;
 }
 
 async function handleCommand(command) {
-    printCommand(command);
-
     // If in quiz mode, handle as answer
     if (currentQuiz && currentQuestionIndex < currentQuiz.questions.length) {
+        printAnswer(command);
         await handleQuizAnswer(command);
         return;
     }
+
+    printCommand(command);
 
     // Parse command
     const parts = command.toLowerCase().split(' ');
