@@ -63,20 +63,26 @@ function print(text, className = '') {
     scrollToBottom();
 }
 
-function printCommand(command) {
+function printPromptLine(text, promptSymbol, promptColor) {
     const line = document.createElement('div');
     line.className = 'output-line';
-    line.innerHTML = `<span style="color: #4ade80;">$</span> ${command}`;
+    
+    const prompt = document.createElement('span');
+    prompt.style.color = promptColor;
+    prompt.textContent = promptSymbol;
+    
+    line.appendChild(prompt);
+    line.appendChild(document.createTextNode(' ' + text));
     output.appendChild(line);
     scrollToBottom();
 }
 
+function printCommand(command) {
+    printPromptLine(command, '$', '#4ade80');
+}
+
 function printAnswer(answer) {
-    const line = document.createElement('div');
-    line.className = 'output-line';
-    line.innerHTML = `<span style="color: #60a5fa;">›</span> ${answer}`;
-    output.appendChild(line);
-    scrollToBottom();
+    printPromptLine(answer, '›', '#60a5fa');
 }
 
 function scrollToBottom() {
