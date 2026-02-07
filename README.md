@@ -96,13 +96,19 @@ go build -o terminal-trainer-web main.go
 Terminal Trainer now has a web-based interface! Run the web server to use Terminal Trainer in your browser:
 
 ```bash
-# Run from source
+# Quick start with convenience script
+./terminal-trainer-web.sh
+
+# Or run from source
 cd experience/web
 go run main.go
 
 # Or build and run
 go build -o terminal-trainer-web main.go
 ./terminal-trainer-web
+
+# Or use Docker
+docker-compose up
 ```
 
 Then open your browser to `http://localhost:8080` and enjoy the terminal-like interface with:

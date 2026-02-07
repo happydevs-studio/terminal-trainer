@@ -97,18 +97,26 @@ The web server can be deployed anywhere Go applications can run:
 - Cloud platforms (AWS, GCP, Azure)
 - Platform-as-a-Service (Heroku, Railway, Render)
 
-Example Dockerfile:
+### Docker Deployment
 
-```dockerfile
-FROM golang:1.24-alpine AS builder
-WORKDIR /app
-COPY . .
-RUN cd experience/web && go build -o terminal-trainer-web main.go
+Build and run with Docker:
 
-FROM alpine:latest
-WORKDIR /app
-COPY --from=builder /app/experience/web/terminal-trainer-web .
-COPY --from=builder /app/knowledge ./knowledge
-EXPOSE 8080
-CMD ["./terminal-trainer-web"]
+```bash
+# Build the Docker image
+docker build -f Dockerfile.web -t terminal-trainer-web .
+
+# Run the container
+docker run -p 8080:8080 terminal-trainer-web
 ```
+
+Or use Docker Compose:
+
+```bash
+docker-compose up
+```
+
+The web interface will be available at `http://localhost:8080`.
+
+### Example Dockerfile
+
+See the included `Dockerfile.web` in the project root for a multi-stage build that creates a minimal Alpine-based image.
