@@ -17,6 +17,7 @@ window.addEventListener('load', () => {
 // Handle command input
 input.addEventListener('keydown', async (e) => {
     if (e.key === 'Enter') {
+        e.preventDefault();
         const command = input.value.trim();
         if (command) {
             commandHistory.push(command);
