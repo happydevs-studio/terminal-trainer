@@ -6,6 +6,14 @@ exports.handler = async (event, context) => {
     // Get topic from query parameters
     const topic = event.queryStringParameters?.topic || 'linux';
 
+    // Validate topic to prevent path traversal attacks
+    if (!/^[a-z0-9-]+$/i.test(topic)) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Invalid topic name' })
+      };
+    }
+
     // Read the knowledge file from the same directory as the function
     const knowledgeFile = path.join(__dirname, 'knowledge', `${topic}.json`);
     

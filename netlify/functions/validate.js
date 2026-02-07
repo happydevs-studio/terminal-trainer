@@ -14,8 +14,11 @@ exports.handler = async (event, context) => {
     const userAnswer = body.userAnswer || '';
     const description = body.description || '';
 
-    // Simple validation logic - check if the answers match (case-insensitive, trimmed)
-    const correct = expectedAnswer.trim().toLowerCase() === userAnswer.trim().toLowerCase();
+    // Normalize whitespace for comparison: trim and collapse multiple spaces
+    const normalizeAnswer = (answer) => answer.trim().toLowerCase().replace(/\s+/g, ' ');
+    
+    // Simple validation logic - check if the answers match (case-insensitive, normalized whitespace)
+    const correct = normalizeAnswer(expectedAnswer) === normalizeAnswer(userAnswer);
 
     return {
       statusCode: 200,

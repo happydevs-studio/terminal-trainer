@@ -93,7 +93,15 @@ go build -o terminal-trainer-web main.go
 
 ## Web Interface
 
-Terminal Trainer now has a web-based interface! Run the web server to use Terminal Trainer in your browser:
+Terminal Trainer now has a web-based interface! 
+
+### Try it Online
+
+Visit the live demo at: [Deployed on Netlify]
+
+### Run Locally
+
+Run the web server to use Terminal Trainer in your browser:
 
 ```bash
 # Quick start with convenience script
@@ -119,6 +127,10 @@ Then open your browser to `http://localhost:8080` and enjoy the terminal-like in
 - 🎨 Beautiful terminal aesthetics
 
 See [experience/web/README.md](experience/web/README.md) for more details.
+
+### Netlify Deployment
+
+The web interface can be deployed to Netlify. See [netlify/README.md](netlify/README.md) for deployment instructions.
 
 ## Usage Examples
 
