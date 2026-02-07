@@ -69,3 +69,7 @@ vendor/
 
 # Temp copied files
 bundle/
+
+# Netlify build output
+public/
+.netlify/
