@@ -16,8 +16,8 @@ exports.handler = async (event, context) => {
     const topic = body.topic || 'linux';
     const count = body.count || 0;
 
-    // Read the knowledge file
-    const knowledgeFile = path.join(__dirname, '../../knowledge', `${topic}.json`);
+    // Read the knowledge file from the same directory as the function
+    const knowledgeFile = path.join(__dirname, 'knowledge', `${topic}.json`);
     
     if (!fs.existsSync(knowledgeFile)) {
       return {
@@ -30,15 +30,16 @@ exports.handler = async (event, context) => {
     
     // Convert the knowledge data to questions format
     const questions = [];
-    if (knowledgeData.commands) {
-      for (const cmd of knowledgeData.commands) {
-        questions.push({
-          Text: cmd.question,
-          ExpectedAnswer: cmd.command,
-          Description: cmd.description,
-          Category: knowledgeData.category || 'general'
-        });
-      }
+    // Handle both 'commands' and 'shortcuts' properties
+    const items = knowledgeData.commands || knowledgeData.shortcuts || [];
+    
+    for (const item of items) {
+      questions.push({
+        Text: item.question,
+        ExpectedAnswer: item.command,
+        Description: item.description,
+        Category: knowledgeData.category || 'general'
+      });
     }
 
     // Limit questions if count is specified

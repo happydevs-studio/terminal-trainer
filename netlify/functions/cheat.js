@@ -6,8 +6,8 @@ exports.handler = async (event, context) => {
     // Get topic from query parameters
     const topic = event.queryStringParameters?.topic || 'linux';
 
-    // Read the knowledge file
-    const knowledgeFile = path.join(__dirname, '../../knowledge', `${topic}.json`);
+    // Read the knowledge file from the same directory as the function
+    const knowledgeFile = path.join(__dirname, 'knowledge', `${topic}.json`);
     
     if (!fs.existsSync(knowledgeFile)) {
       return {
@@ -20,14 +20,15 @@ exports.handler = async (event, context) => {
     
     // Convert to commands format
     const commands = [];
-    if (knowledgeData.commands) {
-      for (const cmd of knowledgeData.commands) {
-        commands.push({
-          command: cmd.command,
-          description: cmd.description,
-          category: knowledgeData.category || 'general'
-        });
-      }
+    // Handle both 'commands' and 'shortcuts' properties
+    const items = knowledgeData.commands || knowledgeData.shortcuts || [];
+    
+    for (const item of items) {
+      commands.push({
+        command: item.command,
+        description: item.description,
+        category: knowledgeData.category || 'general'
+      });
     }
 
     return {

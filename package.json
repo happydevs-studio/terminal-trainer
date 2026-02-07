@@ -1,0 +1,9 @@
+{
+  "name": "terminal-trainer-netlify",
+  "version": "1.0.0",
+  "description": "Terminal Trainer Web on Netlify",
+  "private": true,
+  "scripts": {
+    "build": "./build-netlify.sh"
+  }
+}

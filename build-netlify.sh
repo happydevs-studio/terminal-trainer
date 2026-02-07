@@ -16,4 +16,9 @@ cp experience/web/templates/index.html public/index.html
 echo "Copying static assets..."
 cp -r experience/web/static public/
 
+# Copy knowledge files to functions directory for bundling
+echo "Copying knowledge files to functions directory..."
+mkdir -p netlify/functions/knowledge
+cp knowledge/*.json netlify/functions/knowledge/
+
 echo "Build complete! Files are in the public directory."
