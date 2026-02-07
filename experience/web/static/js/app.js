@@ -18,6 +18,8 @@ window.addEventListener('load', () => {
 input.addEventListener('keydown', async (e) => {
     if (e.key === 'Enter') {
         e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         const command = input.value.trim();
         if (command) {
             commandHistory.push(command);
@@ -25,6 +27,7 @@ input.addEventListener('keydown', async (e) => {
             await handleCommand(command);
         }
         input.value = '';
+        return false;
     } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         if (historyIndex > 0) {
@@ -40,6 +43,15 @@ input.addEventListener('keydown', async (e) => {
             historyIndex = commandHistory.length;
             input.value = '';
         }
+    }
+});
+
+// Additional handler to prevent any keypress events that might trigger print
+input.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
     }
 });
 
