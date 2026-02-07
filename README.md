@@ -83,9 +83,42 @@ sudo mv terminal-trainer /usr/local/bin/
 cd experience/cli
 go build -o terminal-trainer main.go
 
+# Build the Web Server
+cd experience/web
+go build -o terminal-trainer-web main.go
+
 # Or use the convenience script from project root (auto-builds if needed)
 ./terminal-trainer.sh --help
 ```
+
+## Web Interface
+
+Terminal Trainer now has a web-based interface! Run the web server to use Terminal Trainer in your browser:
+
+```bash
+# Quick start with convenience script
+./terminal-trainer-web.sh
+
+# Or run from source
+cd experience/web
+go run main.go
+
+# Or build and run
+go build -o terminal-trainer-web main.go
+./terminal-trainer-web
+
+# Or use Docker
+docker-compose up
+```
+
+Then open your browser to `http://localhost:8080` and enjoy the terminal-like interface with:
+
+- 🎯 Interactive quizzes
+- 📚 Cheat sheets  
+- ✅ Real-time answer validation
+- 🎨 Beautiful terminal aesthetics
+
+See [experience/web/README.md](experience/web/README.md) for more details.
 
 ## Usage Examples
 

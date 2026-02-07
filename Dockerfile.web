@@ -1,0 +1,41 @@
+# Build stage
+FROM golang:1.24-alpine AS builder
+
+WORKDIR /build
+
+# Copy go mod files
+COPY behaviour/go.mod behaviour/go.sum ./behaviour/
+COPY experience/web/go.mod ./experience/web/
+
+# Download dependencies
+RUN cd behaviour && go mod download
+RUN cd experience/web && go mod download
+
+# Copy source code
+COPY behaviour ./behaviour
+COPY experience/web ./experience/web
+COPY knowledge ./knowledge
+
+# Build the web server
+RUN cd experience/web && \
+    CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o terminal-trainer-web main.go
+
+# Runtime stage
+FROM alpine:latest
+
+RUN apk --no-cache add ca-certificates
+
+WORKDIR /app
+
+# Copy the binary and knowledge files
+COPY --from=builder /build/experience/web/terminal-trainer-web .
+COPY --from=builder /build/knowledge ./knowledge
+
+# Expose the default port
+EXPOSE 8080
+
+# Set environment variable for port
+ENV PORT=8080
+
+# Run the web server
+CMD ["./terminal-trainer-web"]

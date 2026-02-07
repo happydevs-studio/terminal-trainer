@@ -11,6 +11,7 @@
 # Built binary (add your binary name here)
 terminal-trainer
 experience/cli/terminal-trainer
+experience/web/terminal-trainer-web
 
 # Test binary, built with `go test -c`
 *.test
