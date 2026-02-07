@@ -18,29 +18,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
       - name: Build application
-        run: npm run build
+        run: ./build-netlify.sh
 
       - name: Deploy to Netlify (Production)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: nwtgck/actions-netlify@v2.1
         with:
-          publish-dir: './dist'
+          publish-dir: './public'
           production-deploy: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Deploy from GitHub Actions - ${{ github.event.head_commit.message }}"
           enable-pull-request-comment: false
           enable-commit-comment: true
           overwrites-pull-request-comment: false
+          functions-dir: './netlify/functions'
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
@@ -50,7 +42,7 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: nwtgck/actions-netlify@v2.1
         with:
-          publish-dir: './dist'
+          publish-dir: './public'
           production-deploy: false
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Deploy preview from PR #${{ github.event.number }}"
@@ -58,6 +50,7 @@ jobs:
           enable-commit-comment: false
           overwrites-pull-request-comment: true
           alias: pr-${{ github.event.number }}
+          functions-dir: './netlify/functions'
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}

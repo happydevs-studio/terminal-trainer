@@ -1,0 +1,59 @@
+const fs = require('fs');
+const path = require('path');
+
+exports.handler = async (event, context) => {
+  try {
+    // Get topic from query parameters
+    const topic = event.queryStringParameters?.topic || 'linux';
+
+    // Validate topic to prevent path traversal attacks
+    if (!/^[a-z0-9-]+$/i.test(topic)) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Invalid topic name' })
+      };
+    }
+
+    // Read the knowledge file from the same directory as the function
+    const knowledgeFile = path.join(__dirname, 'knowledge', `${topic}.json`);
+    
+    if (!fs.existsSync(knowledgeFile)) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({ error: `Topic not found: ${topic}` })
+      };
+    }
+
+    const knowledgeData = JSON.parse(fs.readFileSync(knowledgeFile, 'utf8'));
+    
+    // Convert to commands format
+    const commands = [];
+    // Handle both 'commands' and 'shortcuts' properties
+    const items = knowledgeData.commands || knowledgeData.shortcuts || [];
+    
+    for (const item of items) {
+      commands.push({
+        command: item.command,
+        description: item.description,
+        category: knowledgeData.category || 'general'
+      });
+    }
+
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        commands: commands,
+        topic: topic
+      })
+    };
+  } catch (error) {
+    console.error('Error in cheat function:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Internal server error', message: error.message })
+    };
+  }
+};
