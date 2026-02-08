@@ -18,6 +18,8 @@ window.addEventListener('load', () => {
 input.addEventListener('keydown', async (e) => {
     if (e.key === 'Enter') {
         e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         const command = input.value.trim();
         if (command) {
             commandHistory.push(command);
@@ -25,6 +27,7 @@ input.addEventListener('keydown', async (e) => {
             await handleCommand(command);
         }
         input.value = '';
+        return false;
     } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         if (historyIndex > 0) {
@@ -40,6 +43,15 @@ input.addEventListener('keydown', async (e) => {
             historyIndex = commandHistory.length;
             input.value = '';
         }
+    }
+});
+
+// Additional handler to prevent any keypress events that might trigger print
+input.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
     }
 });
 
@@ -63,12 +75,26 @@ function print(text, className = '') {
     scrollToBottom();
 }
 
-function printCommand(command) {
+function printPromptLine(text, promptSymbol, promptColor) {
     const line = document.createElement('div');
     line.className = 'output-line';
-    line.innerHTML = `<span style="color: #4ade80;">$</span> ${command}`;
+    
+    const prompt = document.createElement('span');
+    prompt.style.color = promptColor;
+    prompt.textContent = promptSymbol;
+    
+    line.appendChild(prompt);
+    line.appendChild(document.createTextNode(' ' + text));
     output.appendChild(line);
     scrollToBottom();
+}
+
+function printCommand(command) {
+    printPromptLine(command, '$', '#4ade80');
+}
+
+function printAnswer(answer) {
+    printPromptLine(answer, '›', '#60a5fa');
 }
 
 function scrollToBottom() {
@@ -77,13 +103,14 @@ function scrollToBottom() {
 }
 
 async function handleCommand(command) {
-    printCommand(command);
-
     // If in quiz mode, handle as answer
     if (currentQuiz && currentQuestionIndex < currentQuiz.questions.length) {
+        printAnswer(command);
         await handleQuizAnswer(command);
         return;
     }
+
+    printCommand(command);
 
     // Parse command
     const parts = command.toLowerCase().split(' ');
